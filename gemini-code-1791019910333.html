@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Revit Essential Evaluation ข้อสอบออนไลน์</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--ink:#1b2430;--mut:#5f6b7a;--line:#d5dbe3;--acc:#0b5cab;--ok:#127a43;--okb:#e2f4e9;--bad:#b42318;--badb:#fdeceb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12171d;--card:#1b222b;--ink:#e6ebf1;--mut:#9aa7b6;--line:#34404d;--acc:#6cb2f5;--ok:#5fd193;--okb:#16372a;--bad:#ff8a80;--badb:#412120}}
+:root[data-theme="dark"]{--bg:#12171d;--card:#1b222b;--ink:#e6ebf1;--mut:#9aa7b6;--line:#34404d;--acc:#6cb2f5;--ok:#5fd193;--okb:#16372a;--bad:#ff8a80;--badb:#412120}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'IBM Plex Sans Thai',system-ui,sans-serif}
+main{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:1.3rem;margin:8px 0 4px}h2{font-size:1.05rem;margin:28px 0 8px;color:var(--acc)}
+.sub{color:var(--mut);margin:0 0 12px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);display:flex;justify-content:space-between;align-items:center;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line);z-index:2}
+#tm{font-weight:600;font-variant-numeric:tabular-nums}
+section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}
+section p{margin:0 0 8px}
+label{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;margin:4px 0;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+label:has(input:checked){border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
+input{margin-top:6px}
+label.ok{background:var(--okb);border-color:var(--ok)}label.ok::after{content:"✓ คำตอบที่ถูก";margin-left:auto;color:var(--ok);font-size:.85rem;white-space:nowrap}
+label.bad{background:var(--badb);border-color:var(--bad)}label.bad::after{content:"✗ ที่คุณเลือก";margin-left:auto;color:var(--bad);font-size:.85rem;white-space:nowrap}
+button{font:inherit;font-weight:600;background:var(--acc);color:var(--bg);border:0;border-radius:6px;padding:10px 18px;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+#res{background:var(--card);border:2px solid var(--acc);border-radius:8px;padding:12px 14px;margin:12px 0;font-size:1.1rem}
+</style></head>
+<body><main>
+<h1>Revit Essential Evaluation [ESS-2026 Updated]</h1>
+<p class="sub" id="sub-title">กำลังโหลดข้อมูลข้อสอบ...</p>
+<div class="bar"><span id="pg">ตอบแล้ว 0/0</span><span id="tm">90:00</span></div>
+<div id="res" hidden></div>
+<div id="qs"></div>
+<p><button id="sb">ส่งคำตอบ</button> <button id="rs" hidden>ทำใหม่</button></p>
+</main>
+<script>
+const Q=[
+["คำสั่งใด ไม่จัดอยู่ในกลุ่ม System Family ?",["Wall","Floor","Stair","Door"],3],
+["ข้อใดคือ นามสกุลไฟล์ของ Revit Template ?",[".rtm",".rte",".rtp",".rvt"],1],
+["ข้อใดกล่าวไม่ถูกต้อง เกี่ยวกับคำสั่ง Scale ?",["ใช้ปรับขนาดพื้นที่ของฝ้าได้","ไม่สามารถขยายขนาดของโมเดล 3 มิติ ได้โดยตรง","ใช้เพิ่มความยาวของเส้น 2 มิติ ได้","ไม่สามารถปรับขนาดของ Text ได้"],1],
+["ข้อใดต่อไปนี้กล่าวถึงฟังก์ชั่น Save ของ Revit ได้ถูกต้อง ?",["ไฟล์ที่มีชื่อต่อท้ายเป็นตัวเลข เช่น Project1.0005.rvt คือไฟล์เสียที่เกิดจากการเซฟขัดข้อง","สามารถเลือก Save As Revit 2024 ให้เป็นเวอร์ชัน 2022 เพื่อให้เวอร์ชันเก่าเปิดใช้งานได้","เมื่อใช้ระบบ Worksharing การกดปุ่ม Save คือการบันทึกงานลงเครื่องตัวเอง","มีระบบ Backup / Auto Save ช่วยป้องกันข้อมูลสูญหาย"],3],
+["การเลือกวัตถุใน Revit แบบ \"ลากเมาส์จากขวาไปซ้าย\" (Crossing Selection) กับ \"ซ้ายไปขวา\" (Window Selection) ต่างกันอย่างไร ?",["ลากซ้ายไปขวาจะเลือกเฉพาะสิ่งที่อยู่ภายในกรอบทั้งหมดเท่านั้น","ลากซ้ายไปขวาจะเลือกเฉพาะวัตถุที่อยู่บนสุดเท่านั้น","ลากจากขวาไปซ้ายจะเลือกเฉพาะสิ่งที่อยู่ภายในกรอบทั้งหมดเท่านั้น","หากกด CTRL ค้าง ลากขวาไปซ้ายใช้สำหรับลบวัตถุ ซ้ายไปขวาใช้สำหรับคัดลอกวัตถุ"],0],
+["ข้อใดคือประโยชน์หลักของการใช้ BIM ในอุตสาหกรรมการก่อสร้าง ?",["ปรับปรุงการทำงานร่วมกัน ลดข้อผิดพลาด และเพิ่มประสิทธิภาพโครงการ","ช่วยลดต้นทุนการก่อสร้าง จากการทำ Value Engineering ในทุกโครงการ","สร้างโมเดล 3 มิติ เพื่อใช้แทนการคำนวณโครงสร้างทางวิศวกรรมได้ทั้งหมด","ใช้สร้างแบบ 2 มิติได้เร็วกว่าการใช้ CAD เพียงอย่างเดียว"],0],
+["Type Parameter หมายถึงอะไร ?",["ข้อมูลที่ใช้เป็นค่ากลางสำหรับโมเดลทุก Category ในโครงการ","ข้อมูลลักษณะเฉพาะที่ใช้ร่วมกันในโมเดลประเภทเดียวกัน","ข้อมูลตัวอักษรและตัวเลขทั้งหมด ที่แสดงอยู่บน Titleblock","ข้อมูลที่แสดงอยู่ใน Family ซึ่งจะมีค่าไม่ซ้ำกัน"],1],
+["ข้อใดอธิบายความสัมพันธ์ในลำดับชั้นของ Revit Family จากใหญ่ไปเล็กได้ถูกต้อง ?",["Category > Family > Type > Instance","Project > Family > Category > Type","Family > Category > Instance > Type","Instance > Type > Family > Category"],0],
+["ข้อใดกล่าวไม่ถูกต้อง เมื่อเปลี่ยน View Scale ของ Revit ?",["การวัดระยะ Dimensions จะได้ตัวเลขคงเดิม","ขนาด Drawing บน Sheet จะเปลี่ยนไปตาม View Scale","เมื่อ Plot แบบก่อสร้าง ตัวอักษรจะมีขนาดเท่าเดิม","ปรับ Scale 1:100 เป็น 1:50 ขนาดโมเดลและแบบจะขยายใหญ่ขึ้น 2 เท่า"],1],
+["เมื่อคุณลบ \"สัญลักษณ์รูปตัด (Section)\" ในหน้าแปลนทิ้ง จะเกิดผลกระทบอย่างไรกับโปรเจกต์ ?",["หน้า View รูปตัดนั้นจะถูกลบทิ้งออกจากโปรเจกต์ถาวร","เฉพาะเส้นที่หายไป แต่หน้ากระดาษที่แสดงรูปตัดนั้นยังอยู่ปกติ","โปรแกรมจะถามหาไฟล์สำรองเพื่อกู้คืนเส้นรูปตัด","เส้นรูปตัดจะกลายเป็นเส้นสีแดงเพื่อเตือนว่า \"Broken Link\""],0],
+["สามารถนำไฟล์ Revit เวอร์ชันเก่าไปเปิดในเวอร์ชันใหม่ได้หรือไม่ ?",["เปิดได้ และโปรแกรมจะทำการ Upgrade ไฟล์","เปิดไม่ได้ ต้องใช้โปรแกรมแปลงไฟล์ก่อน","เปิดได้เฉพาะไฟล์ Family (.rfa) เท่านั้น","เปิดได้แต่ไม่สามารถแก้ไขโมเดลได้"],0],
+["หากคุณต้องการสลับหน้าต่างที่เปิดค้างไว้หลายๆ หน้า (เช่น สลับจากแปลนไปดู 3D) โดยไม่ใช้เมาส์คลิกที่แถบ Tab ด้านบน คุณสามารถใช้ปุ่มลัด (Shortcut) ใดบนคีย์บอร์ด ?",["Ctrl + Tab","Ctrl + S","Ctrl + W","Ctrl + I"],0],
+["หากคุณคุ้นเคยกับการใช้ AutoCAD และต้องการเปลี่ยน \"สีพื้นหลังหน้าจอทำงาน\" จากสีขาวเป็นสีดำเพื่อให้สบายตา คุณต้องเข้าไปตั้งค่าที่จุดใด ?",["หน้าต่าง Visibility/Graphics (VG)","หน้าต่าง Properties ของ View นั้น","ต้องไปเปลี่ยนในโปรแกรม Windows Setting","เมนู File > Options > Colors > Canvas Background"],3],
+["View Control Bar มีไอคอนรูป \"แว่นตา\" (Temporary Hide/Isolate) เอาไว้ใช้ในกรณีใด ?",["ใช้ซ่อนวัตถุแบบกรอง Parameter","ใช้ซ่อนวัตถุแบบถาวรเพื่อไม่ให้ปรากฏในตอนปริ้นแบบ","ใช้ซ่อนวัตถุหรือ Category ชั่วคราว","ใช้ซ่อนวัตถุหลาย View พร้อมกัน"],2],
+["เมื่อเริ่มใช้คำสั่งสร้างผนัง (Wall) ส่วนใดของ User Interface ที่จะให้คำแนะนำในการดำเนินการขั้นตอนต่อไป?",["แถบคำสั่ง (Ribbon)","คำแนะนำเครื่องมือ (Tool Tips)","แถบสถานะ (Status Bar)","ตัวนำทางโปรเจกต์ (Project Browser)"],2],
+["หาก Properties Palette หายไปจาก Interface ให้ไปตรวจสอบที่ใด ?",["Revit option","Additional Setting","Tab: Manage","Tab: View"],3],
+["ข้อใดกล่าวไม่ถูกต้อง สำหรับฟังก์ชั่นของ View Control Bar (แถบด้านล่างของ Drawing Area) ?",["ใช้กำหนดความหนาเส้นได้","ใช้เปลี่ยน View Scale ของแบบก่อสร้างได้","ใช้ Render ภาพได้","ใช้กำหนดขอบเขตของแบบก่อสร้างบนกระดาษได้"],0],
+["เมื่อเปิดใช้งานคำสั่งสร้างโมเดลสถาปัตยกรรม เช่น 'Wall' หรือ 'Door' ในส่วน 'Options Bar' ที่ปรากฏอยู่ใต้ Ribbon มีหน้าที่หลักอย่างไร ?",["เป็นแถบที่เอาไว้ปรับระดับความละเอียดโมเดลในแบบ","เป็นแถบที่เอาไว้พิมพ์คำสั่งเหมือน Command Line ใน CAD","เป็นแถบที่แสดงชื่อโมเดลที่กำลังเลือกอยู่","นำเสนอพารามิเตอร์และตัวเลือกวิธีการเขียนโมเดล ที่เกี่ยวข้องกับคำสั่งที่กำลังทำงานอยู่"],3],
+["View Cube ใน 3D View มีหน้าที่ช่วยในการบังคับทิศทางของโมเดล 3 มิติ สามารถเรียกใช้ได้จากที่ใด ?",["Tab: View","Tab: Manage","Drawing Area","Project Browser"],0],
+["หากมี View ที่เปิดค้างอยู่ใน Project จำนวนมาก และต้องการจัดเรียง View เหล่านั้นเพื่อดูพร้อมกัน คุณจะใช้คำสั่งใดจาก Tab: View ?",["Switch Windows","Show Windows","Cascade Windows","Tile Views / Tile Windows"],3],
+["เมื่อเปิด Revit แล้วพบว่าชุดคำสั่งมีขนาดที่เล็กมาก ไม่สะดวกในการทำงาน ควรแก้ไขที่ใด?",["ตั้งค่า Display Setting / Scale Resolution ของ Windows","ตั้งค่า Display Setting ของ Window ให้มีขนาด Resolution ที่ใหญ่ขึ้น","ตั้งค่าที่ Graphic Display Options","ไม่สามารถปรับขนาดได้"],0],
+["หลังจากมีการสร้าง Level เรียบร้อยแล้ว แต่ไม่มีแปลนพื้น หากต้องการสร้าง Floor Plan เพิ่มจาก Level ที่มีอยู่เดิม ต้องใช้คำสั่งใด ?",["Duplicate View","Plan Views > Floor Plan","Align to Selected Level","Plan Region"],1],
+["กรณีที่ต้องการ Copy โมเดลจาก ชั้น 1 ไปวางยังชั้น 2 ในตำแหน่งเดิม ต้องใช้คำสั่ง Copy ที่แสดงอยู่ใน Ribbon ใด ?",["Modify","Geometry","Clipboard (Aligned to Selected Levels)","Window"],2],
+["เมื่อคุณเลือกโมเดลใน Revit มักจะปรากฏ 'Temporary Dimensions' ประโยชน์หลักของสิ่งนี้คืออะไร?",["เพื่อเสนอแนะระยะและปรับแต่งตำแหน่งได้ทันที","เพื่อแสดงขนาดของโมเดลเท่านั้น","เพื่อใช้แสดงระยะในขั้นตอนการเขียนแบบถาวร","เพื่อแจ้งเตือนการชนกันที่อาจเกิดขึ้นกับโมเดลอื่น"],0],
+["หลังจากกำหนดรหัสฐานรากเรียบร้อย เมื่อต้องการวาง Tag ไปยังโมเดลฐานรากทั้งหมดในแปลน ควรใช้คำสั่งใด ?",["Tag All","Tag by Categories","Tag Symbol","Tag selected element in view"],0],
+["การเริ่มเขียนท่อ Pipe หรือ Duct สิ่งที่สำคัญที่สุดที่ต้องทำคืออะไร ?",["ตั้งค่า Material แยกสีท่อตามกลุ่มงาน","ใช้คำสั่ง Line วาดเส้นร่างก่อน เพื่อกำหนด Center ของท่อ","กำหนด System Type ให้ถูกต้อง","ปรับค่า Detail Level เป็น Fine เสมอ"],2],
+["ภายหลังจากการ Hide โมเดล หากต้องการค้นหาโมเดลชิ้นที่ถูกซ่อน ต้องเลือกใช้คำสั่งใด ?",["Unhide Elements","Reveal Hidden Elements (รูปหลอดไฟ)","Isolate Elements","Displace Elements"],1],
+["ต้องการเขียนผนังจากชั้น 1 ไปจนถึงท้องคานของชั้น 2 ควรตั้งค่า Wall Constraints อย่างไร เพื่อให้โมเดลปรับเปลี่ยนตามอัตโนมัติหาก Level มีการเปลี่ยนแปลง แต่ความลึกคานเท่าเดิม ?",["เขียนผนังให้สูงเกินระดับท้องคาน แล้วจึงใช้คำสั่ง Edit Profile","ตั้งค่า Base Constraint เป็น Level 1 และใช้คำสั่ง Attach Top/Base ไปที่ท้องคาน","ตั้งค่า Base Constraint เป็น Level 1 และ Unconnected Height ให้เท่ากับความสูงท้องคาน","ตั้งค่า Base Constraint เป็น Level 1 และ Top Constraint เป็น Level 2 พร้อมใส่ค่า Top Offset เป็นค่าติดลบตามความหนาคาน"],3],
+["กรณีที่ต้องการสร้าง View ที่เหมือนกันกับต้นฉบับทั้ง 2D และ 3D โดยเมื่อแก้ไขแบบแล้วไม่ต้องการให้กระทบ View ต้นฉบับ ควรเลือกใช้คำสั่งใด ?",["Duplicate from Current View","Duplicate as a Dependent","Duplicate from Clipboard","Duplicate with Detailing"],3],
+["หากคุณต้องการสร้าง \"คานเอียง\" (เช่น คานรับหลังคาปั้นหยา) วิธีการใดที่ทำให้โมเดลมีความแม่นยำและแก้ไขง่ายที่สุด ?",["ใช้คำสั่ง Beam ในมุมมอง 3D แล้วลากเส้นอิสระไปตามตำแหน่งที่ต้องการ","สร้าง Reference Plane เอียงตามองศาหลังคาก่อนเขียนคาน","เขียนคานแนวราบปกติ แล้วใช้คำสั่ง Rotate ในรูปด้าน (Elevation)","ใช้คำสั่ง Component > Model In-Place แล้วเขียนด้วยการ Sweep ตามแนวเส้นเอียง"],1],
+["ในการสร้าง Curtain Wall คำสั่งที่ใช้ในการตัดแบ่ง Pattern ของกระจก คือคำสั่งใด ?",["Split Pattern","Cut","Curtain Grid","Curtain Pattern"],2],
+["ข้อใดกล่าวถึงความแตกต่างระหว่าง \"Detail Line\" และ \"Model Line\" ได้ถูกต้องที่สุด ?",["Detail Line คือเส้นที่สามารถกำหนดน้ำหนักเส้นได้เท่านั้น","Detail Line ใช้สำหรับเขียนรายละเอียดที่มีขนาดไม่น้อยกว่า 1:50","Model Line คือเส้น 3D ที่เห็นได้ในทุก View","Model Line สามารถใช้ในการคำนวณทางโครงสร้างได้"],2],
+["คำสั่งใด ใช้ในการอ่านค่าระดับความสูงที่พื้นผิวของวัตถุในโมเดลและแบบ ?",["Spot Elevation","Spot Slope","Dimension","Level"],0],
+["คำสั่ง Underlay ที่ใช้ซ้อนแปลนชั้นอื่นมาวางยังแปลนที่เลือกเพื่อใช้อ้างอิง สามารถเรียกใช้ได้จากเครื่องมือใด ?",["แถบคำสั่ง (Ribbon)","แถบคุณสมบัติ (Properties)","แถบสถานะ (Status Bar)","ตัวนำทางโปรเจกต์ (Project Browser)"],1],
+["เมื่อคุณอยู่ในหน้าต่างการตั้งค่าวัสดุ Material Browser แถบ \"Graphics\" และ \"Appearance\" ต่างกันอย่างไรในเชิงการแสดงผล ?",["Graphics จะใช้พลังงานน้อยกว่าทำให้ไม่กระตุก ส่วน Appearance จะใช้แสงเงามากกว่า","Graphics มีไว้ระบุรหัสวัสดุ ส่วน Appearance ใช้ระบุราคา","Graphics ใช้กับ View แปลนหรือรูปตัด ส่วน Appearance ใช้กับ 3D View","Graphics ควบคุมการแสดงผลใน View ปกติ ส่วน Appearance ควบคุมการ Render"],3],
+["การตั้งค่าน้ำหนักของเส้น ที่แสดงในแบบก่อสร้างผ่านโมเดล 3 มิติ สามารถตั้งค่าได้ที่ใด ?",["Line Styles","Model Styles","Object Styles","Visual Styles"],2],
+["คำสั่ง \"Transfer Project Standards\" มีประโยชน์อย่างไรในกรณีที่คุณมี Template ที่ดีอยู่แล้วแต่ลืมใช้ตอนเริ่มงาน ?",["ใช้โอนย้าย License ของโปรแกรม Revit ไปยังเครื่องอื่น","ใช้ส่งไฟล์งานไปให้เพื่อนผ่านระบบ Cloud","ใช้ดึงการตั้งค่า Standards/Line Weights จากอีกไฟล์มาใส่ในไฟล์ปัจจุบัน","ใช้สำหรับย้าย โมเดล จากไฟล์หนึ่งมาใส่ในไฟล์ที่กำลังทำงานอยู่"],2],
+["การเพิ่มระดับการแสดงผลของ Line หรือ Pattern ที่แสดงในแบบก่อสร้างผ่านโมเดลให้มีความละเอียดมากขึ้น ต้องตั้งค่าที่ใด ?",["Linework","Detail Level","Detail Line","Visual Styles"],1],
+["เมื่อคุณเขียน Dimension แล้วพบว่า \"ตัวเลขมีขนาดเล็กเกินไปจนอ่านไม่ออก\" วิธีการแก้ไขที่ถูกต้องและเป็นระบบที่สุดคืออะไร ?",["เข้าไปที่ Edit Type แล้วปรับค่า Text Size","Explode Dimension แล้วพิมพ์ตัวเลขทับลงไป","เปลี่ยนมาตราส่วนของ View ให้ใหญ่ขึ้นเป็น 1:500","ใช้คำสั่ง Scale (RE) เพื่อขยายตัวอักษร"],0],
+["เมื่อต้องการแลกเปลี่ยนข้อมูลโมเดลจาก Revit ไปยังโปรแกรมอื่น เช่น โปรแกรมวิเคราะห์โครงสร้างหรือโปรแกรมการประมาณราคา ควรเลือกใช้รูปแบบไฟล์ใดที่เหมาะสมที่สุดเพื่อให้ข้อมูล BIM ครบถ้วนที่สุด?",["ใช้ Publish to BIM360","ใช้ Export DWG","ใช้ Export IFC","ใช้ Export NWC"],2],
+["การตั้งค่า Pattern ของ Material ที่สามารถกำหนดตำแหน่งเริ่มต้นของเส้นได้ คือ Pattern Type ประเภทใด ?",["Drafting","Model","Coordinate","Align"],1],
+["การตั้งค่าหน่วย (Units) ของโปรเจกต์สามารถทำได้จากเมนูใด?",["Manage > Project Units","Insert > Units","Modify > Unit Setup","File > Units Settings"],0],
+["การสร้างตารางปริมาณ (Schedules) ที่ต้องการคำนวณค่าจาก Parameter ที่มีอยู่ เช่น คำนวณพื้นที่ทาสีจากความยาวผนังคูณด้วยความสูงที่กำหนดเอง ควรตั้งค่าที่ฟังก์ชันใด ?",["ใช้ Project Parameter สำหรับคำนวณ","Export Schedule ไปยัง Excel แล้วคำนวณ","ใช้คำสั่ง Calculated Parameter / Calculated Value","ใช้คำสั่ง Calculate Total"],2],
+["การตั้งค่า View Range ระยะการมองเห็นโมเดลอย่างสมบูรณ์ของ View ใน Floor Plan (เส้นทึบ) คือระยะใด ?",["Cut Plane to Top","Cut Plane to View Depth","Cut Plane to Lower Level","Cut Plane to Bottom"],3],
+["กรณีที่ Project Browser หายไประหว่างทำงาน ต้องไปตรวจสอบที่ใด ?",["Manage > Position","Manage > Additional Settings","View > Switch Windows","View > User Interface"],3],
+["เมื่อ Import CAD เข้ามาใน Revit Project แล้ว พบว่า CAD ไปแสดงผลใน 3D View มักเกิดจากไม่ได้ติ๊กตัวเลือกใด ?",["Current View Only","Import Unit","Positioning","View Range"],0],
+["คุณได้รับไฟล์ CAD งาน Site Plan มาและต้องการนำมาวางเป็นพื้นหลังเพื่อลากเส้นตามในมุมมอง Level 1 เท่านั้น โดยไม่ต้องการให้เส้น CAD นี้ไปปรากฏในมุมมอง 3D หรือหน้าตัดอื่นๆ คุณควรใช้คำสั่งใด ?",["Current View Only","Import Unit","Positioning","View Range"],0],
+["คุณต้องการจะเลือกวัตถุที่อยู่ข้างใต้ เช่น เลือกพื้นใต้เฟอร์นิเจอร์ หรือเลือก Link CAD ใต้พื้น แต่คลิกเท่าไหร่ก็เลือกไม่ได้ โปรแกรมพยายามจะให้เลือกตัวบนตลอดเวลา เทคนิคใดช่วยคุณได้ ?",["กดปุ่ม Tab ที่คีย์บอร์ดซ้ำๆ ขณะวางเมาส์เหนือวัตถุนั้น","เปิดการใช้งาน Select Underlay / Select Pinned Elements","เช็กว่าเปิดการเลือกวัตถุชั้นล่างไว้หรือไม่","ถูกทุกข้อที่กล่าวมา"],3],
+["เมื่อคุณวางตำแหน่ง \"เสาโครงสร้าง\" (Structural Column) ในแปลนชั้น 1 โดยปกติแล้วโปรแกรม Revit จะตั้งค่าเริ่มต้นการวางเสาแบบใดที่มักทำให้หาเสาไม่เจอ ?",["ตั้งค่าเป็น Height ทำให้เสาไปลอยอยู่เหนือระดับ Cut Plane","ตั้งค่าเป็น Depth ทำให้เสาลงไปอยู่ใต้ชั้น 1 ซึ่งมองไม่เห็นในแปลนปกติ","ตั้งค่าเป็น Attach to Top โดยที่ยังไม่มีหลังคา เสาจึงไม่ยอมปรากฏออกมา","ตั้งค่าเป็น Slanted Column ทำให้เสาเอียงจนหลุดออกนอกขอบเขตการมองเห็น"],1],
+["ในการทำตารางถอดปริมาณงานคอนกรีต คุณต้องการให้ตารางสรุป \"ยอดรวม (Total Volume)\" ของคอนกรีตทั้งหมดในโครงการ แต่ตารางแสดงแค่รายการแยกทีละชิ้น คุณต้องไปตั้งค่าที่ Tab ใดใน Schedule ?",["Filter: กรองเอาเฉพาะคอนกรีต","Fields: เพิ่มพารามิเตอร์ \"Total\" เข้าไปในตาราง","Sorting/Grouping: เลือก Formatting และกำหนด Calculate totals ในฟิลด์ Volume","Appearance: ตั้งค่าให้ตัวหนังสือยอดรวมเป็นตัวหนา"],2],
+["คุณได้รับไฟล์จากเพื่อนร่วมงาน แต่เมื่อเปิดดูใน 3D View กลับ \"ไม่เห็นโมเดลอะไรเลย\" ทั้งที่ในหน้า Project Browser ก็มี Floor Plans และตาราง Schedule ครบถ้วน ข้อใดคือขั้นตอนการตรวจสอบที่ครอบคลุมที่สุด ?",["กดปุ่ม VV เพื่อเช็กว่าปิด Category ไว้หรือไม่ และเช็กปุ่ม Reveal Hidden Elements (รูปหลอดไฟ)","เช็กค่า Section Box ในหน้า Properties ว่าตัดโมเดลจนหายไปหมดหรือไม่","คลิกขวาที่ 3D View แล้วเลือก \"Zoom to Fit\" เพราะโมเดลอาจจะอยู่ไกลเกินไป","ถูกทุกข้อที่กล่าวมา"],3],
+["หากได้มีการตั้งค่าความหนาเส้นของโมเดลไว้แล้ว แต่เกิดกรณีที่ความหนาเส้นในแบบก่อสร้าง แสดงผลเท่ากันทั้งหมด ต้องไปแก้ไขที่คำสั่งใด ?",["Line Styles","Line Weight","Object Styles","Thin Line (หรือกด shortcut TL)"],3],
+["ระหว่างที่คุณกำลังเลื่อนผนัง โปรแกรมแสดงหน้าต่าง Error ว่า \"Elements will be deleted\" พร้อมปุ่ม \"Delete Elements\" หากคุณกดลงไป จะเกิดอะไรขึ้น ?",["โปรแกรมจะปิดตัวลงทันที","ไฟล์สำรองจะถูกสร้างขึ้นมาแทนที่ไฟล์หลัก","ผนังที่คุณกำลังเลื่อนจะหายไป","วัตถุอื่นๆ ที่ผูกอยู่กับผนังนั้นจะถูกลบทิ้งไปเพื่อตัดปัญหาการคำนวณ"],3],
+["ข้อใดคือสาเหตุที่ทำให้ ไม่สามารถกด Keyboard Short-cut หรือคีย์ลัดได้ ?",["เปิดทำงานในหน้า Sheet","ยังไม่ได้กด Ctrl ค้าง","ทำงานอยู่ใน Sketch Mode","ไม่ได้เปลี่ยนภาษา Keyboard Language"],3],
+["แปลนพื้นชั้น 1 แสดง Grid Line ครบถ้วน แต่ในแปลนชั้นหลังคา Grid Line หายไปทั้งหมด ควรเข้าไปตรวจสอบที่ใด ?",["แปลนชั้น 2","รูปด้าน (Elevation) เพื่อปรับระดับ Datum Line ให้ตัดผ่านชั้นหลังคา","3D View","Option Bar"],1],
+["เมื่อต้องการสร้างแบบแปลนอาคาร ที่แสดงเฉพาะ \"ผนังก่ออิฐทนไฟหนา 18 ซม.\" เท่านั้น ควรใช้เทคนิคใด ?",["ใช้คำสั่ง Isolate ซ่อนโมเดลอื่นที่ไม่เกี่ยวข้องกับเงื่อนไข","ใช้คำสั่ง Filters ควบคุมการแสดงผลตามพารามิเตอร์ที่กำหนด","ปิด Category ขององค์ประกอบที่ไม่ต้องการให้แสดงผลใน Visibility/Graphic Overrides","ซ่อนองค์ประกอบที่ไม่ต้องการด้วยการคลิกขวาและเลือก \"Hide in View\""],1]
+];
+
+const S={0:"A: Software Understanding",11:"B: User Interface",24:"C: Using Command",34:"D: Setting up",44:"E: Problem Solving"};
+const MIN=90,$=s=>document.querySelector(s),ans={};let t=MIN*60,done=false,tm;
+
+$('#sub-title').textContent = `${Q.length} ข้อ ข้อละ 2 คะแนน รวม ${Q.length*2} คะแนน เวลา ${MIN} นาที`;
+
+Q.forEach((q,i)=>{
+ if(S[i]){const h=document.createElement('h2');h.textContent=S[i];$('#qs').append(h)}
+ const d=document.createElement('section');d.id='q'+i;
+ const p=document.createElement('p');p.textContent=(i+1)+'. '+q[0];d.append(p);
+ q[1].forEach((o,j)=>{const l=document.createElement('label'),r=document.createElement('input'),s=document.createElement('span');
+  r.type='radio';r.name='q'+i;r.value=j;s.textContent=o;l.append(r,s);d.append(l)});
+ $('#qs').append(d)});
+ 
+$('#pg').textContent='ตอบแล้ว 0/'+Q.length;
+
+$('#qs').addEventListener('change',e=>{
+ if(e.target.name){
+  ans[+e.target.name.slice(1)]=+e.target.value;
+  $('#pg').textContent='ตอบแล้ว '+Object.keys(ans).length+'/'+Q.length;
+ }
+});
+
+function tick(){t--;const m=Math.floor(t/60),s=t%60;$('#tm').textContent=m+':'+String(s).padStart(2,'0');if(t<=0)fin()}
+tm=setInterval(tick,1000);
+
+function fin(){
+ if(done)return;done=true;clearInterval(tm);let sc=0;
+ Q.forEach((q,i)=>{if(ans[i]===q[2])sc+=2;
+  document.querySelectorAll('#q'+i+' label').forEach((l,j)=>{if(j===q[2])l.classList.add('ok');else if(j===ans[i])l.classList.add('bad');l.firstChild.disabled=true})});
+ const r=$('#res'),tot=Q.length*2;r.hidden=false;
+ r.textContent='คะแนนที่ได้ '+sc+'/'+tot+' ('+Math.round(sc*100/tot)+'%) ตอบถูก '+sc/2+' จาก '+Q.length+' ข้อ';
+ $('#sb').hidden=true;$('#rs').hidden=false;window.scrollTo({top:0})}
+
+$('#sb').onclick=fin;$('#rs').onclick=()=>location.reload();
+</script></body></html>
